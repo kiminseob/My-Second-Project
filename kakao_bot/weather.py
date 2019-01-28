@@ -7,6 +7,7 @@ todayTemp=""
 compareTemp=""
 #fineDust=""
 
+# Parsing weather
 def find_weather():
 	global todayTemp,compareTemp
 	headers = {'Accept-Encoding': None}

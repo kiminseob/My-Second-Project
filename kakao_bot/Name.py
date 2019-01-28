@@ -1,7 +1,9 @@
 from bs4 import BeautifulSoup as bs
 import re
 my_name=""
-def my_name_fuc(s): # 내 이름 파싱
+
+# Parsing my name
+def my_name_fuc(s):
     global my_name
     my_page = s.get('http://e-learn.cnu.ac.kr/lms/myLecture/doListView.dunet?mnid=201008840728')  # 강의목록확인
     soup = bs(my_page.text, 'html.parser')

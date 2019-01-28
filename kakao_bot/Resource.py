@@ -7,9 +7,10 @@ import requests
 import datetime,time
 from datetime import datetime
 
-my_resource = []#모든 자료실 리스트
+my_resource = []
 
-def my_resource_list_fuc(soup,my_corse_name):  # 자료실입장해서 리스트 가져오기
+# Get a list of all resources.
+def my_resource_list_fuc(soup,my_corse_name):
 
     resorce_page_table = soup.find('table', {'class': 'list'})
     resorce_page_tbody = resorce_page_table.find('tbody')
@@ -20,10 +21,8 @@ def my_resource_list_fuc(soup,my_corse_name):  # 자료실입장해서 리스트
         cols.insert(0, my_corse_name)
         my_resource.append([ele for ele in cols if ele])  # Get rid of empty values
 
-		
-		
-
-def my_all_resource_fuc(): #내 자료실 정렬
+# Sort the list.
+def my_all_resource_fuc():
 	p= re.compile("\s{56}")
 	my_all_resource=""
 	for i in range(my_resource.__len__()):
@@ -31,7 +30,8 @@ def my_all_resource_fuc(): #내 자료실 정렬
 			for j in range(7):
 				if latest_date(my_resource.__getitem__(i)[5],7):
 					count = equals_resource(i)
-					if count == 0 and j==0 : # 과목 이름 맨 첫번째면
+                    # 과목 이름 첫번째일 경우
+					if count == 0 and j==0 :
 						my_all_resource = my_all_resource +"\n※" + my_resource.__getitem__(i)[j]+"\n"
 					elif j==2:
 						if p.search(my_resource.__getitem__(i)[j]) is not None:
@@ -48,8 +48,10 @@ def my_all_resource_fuc(): #내 자료실 정렬
 	if my_all_resource =="":
 		my_all_resource="\n※자료가 없습니다.\n"
 	return my_all_resource
-	
-def latest_date(date,start): #start만큼의 기간동안 공지, 자료실에 대한 내용을 보여준다.
+
+
+# start만큼의 기간에 대한 공지, 자료실에 내용을 가져온다.
+def latest_date(date,start):
     date_array = date.split(".")
     yy = int(date_array[0])
     mm = int(date_array[1])
@@ -61,7 +63,8 @@ def latest_date(date,start): #start만큼의 기간동안 공지, 자료실에 �
     else:
         return False
 
-def equals_resource(ai): #자료실 과목 중복 비교
+#자료실 과목 중복 비교
+def equals_resource(ai):
     count=0
     for i in range(ai):
         if my_resource[i][0] == my_resource[ai][0]:

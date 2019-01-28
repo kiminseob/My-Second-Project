@@ -12,25 +12,23 @@ from myHome.inseopbot import Announcement
 from myHome.inseopbot import Homework
 from myHome.inseopbot import Resource
 
-my_course_id = [] #과목번호
-my_class_no = [] #과목분반
-my_corse_name = [] #과목이름
-my_corse_num =0 #수강 과목 갯수
+my_course_id = []
+my_class_no = []
+my_corse_name = []
+my_corse_num =0
 
 my_all_resource=""
 my_all_homework=""
 my_all_announcement=""
 
 MY_CLASS_FORM={
-    'class_no':"",
-    'course_id':"",
-    'mnid':  "201008254671"
+	#class form
 }
 MY_RESOURCE_FORM={
-    'mnid':"20100863099",
-    'board_no':'6'
+	#resource form
 }
 
+# Get my course name, id, number
 def my_course_fuc(s): ##강의실 ID 파싱
 	global my_corse_num,my_corse_name,my_course_id,my_class_no
 	my_page = s.get('http://e-learn.cnu.ac.kr/lms/myLecture/doListView.dunet?mnid=201008840728')  # 강의목록확인
@@ -40,29 +38,29 @@ def my_course_fuc(s): ##강의실 ID 파싱
 	my_corse_num = count
 	temp2 = temp.__str__()
 
-	p = re.compile('course.id..\w{23}.')  ##정규포현식 사용
+	p = re.compile('course.id..\w{23}.')
 	p2 = re.compile('class_no..\d\d')
 	m = p.findall(temp2)
 	m2 = p2.findall(temp2)
 
 	name_splited_temp = temp2.split("<br/>")
 
-	# 과목번호, 분반, 과목명을 추출한다.
 	for i in range(count):
 		my_course_id.append(m[i].split('"')[1])
 		my_class_no.append(m2[i].split('"')[1])
 		my_corse_name.append(name_splited_temp[i].split('"">')[1].strip())
 
-def my_all_list(s): #공지,자료실,과제 리스트 모두 가져온다
+#Get my announcement, homework, resource file list
+def my_all_list(s):
 	global my_all_announcement,my_all_homework,my_all_resource
-	procs=[] # 프로세스들
-	# 모든 강의실 접속해서 과제,공지,자료실 내용 가져오기
+
+	# All classroom
 	for i in range(my_corse_num):
 		MY_CLASS_FORM['class_no'] = my_class_no[i]
 		MY_CLASS_FORM['course_id'] = my_course_id[i]
 		homework_page = s.post('http://e-learn.cnu.ac.kr/lms/class/classroom/doViewClassRoom_new.dunet', data=MY_CLASS_FORM)
-		# 특정 강의홈 입장
-		#homework_page = s.get('http://e-learn.cnu.ac.kr/lms/class/classroom/doViewClassRoom_new.dunet')
+
+		# Bring information about one classroom.
 		soup = bs(homework_page.text, 'html.parser')
 		Announcement.my_announcement_list_fuc(soup,my_corse_name[i])
 		Homework.my_homework_list_fuc(soup,my_corse_name[i])
@@ -76,15 +74,17 @@ def my_all_list(s): #공지,자료실,과제 리스트 모두 가져온다
 
 
 def start_bot(s):
-	my_course_fuc(s) #내 과목분반,과목id,과목이름 파싱
-	my_all_list(s) # 내 공지,자료,과제 리스트 파싱
-	
+	# My subjects, subject id, subject name parsing
+	my_course_fuc(s)
+	# Parsing my announcement, homework, resource file list
+	my_all_list(s)
+
 def main(input_id,userID,s):
 	global my_all_announcement, my_all_homework, my_all_resource, my_major
 	start_time = time.time()
 
-
-	start_bot(s) #봇 시작
+	# Bot start
+	start_bot(s)
 	
 	myTable=MY_HOME.objects.get(pk=userID)
 	
