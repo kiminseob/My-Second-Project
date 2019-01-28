@@ -2,7 +2,7 @@
 * 충남대학교 사이버캠퍼스 사이트의 공지사항,자료실,과제 게시판에 업로드 된 사항들을 한번에 모아보기 해주는 봇입니다. 
 
 ## 플러스친구 바로가기
-[![](./[Kakao]inseop_bot/img/id_type.png)](https://pf.kakao.com/_eeafC)
+[![](./img/id_type.png)](https://pf.kakao.com/_eeafC)
 
 ## 개발환경
 * Python 3.5.3
@@ -148,9 +148,9 @@ def message(request):
             my_homework.append([ele for ele in cols if ele]) # Get rid of empty values
   ```
 ## 실행 결과
-![](./[Kakao]inseop_bot/img/start.jpg)
-![](./[Kakao]inseop_bot/img/name.jpg)
-![](./[Kakao]inseop_bot/img/all_view.jpg)
-![](./[Kakao]inseop_bot/img/button.jpg)
+![](./img/start.jpg)
+![](./img/name.jpg)
+![](./img/all_view.jpg)
+![](./img/button.jpg)
 
 
